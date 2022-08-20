@@ -4,19 +4,25 @@
 <head>
   <meta charset="utf-8">
   <title>まねぷよ</title>
-  <link rel="stylesheet" href="windi.css">
+  <link rel="stylesheet" href="lib/select2.min.css">
   <link rel="stylesheet" href="popup.css">
 </head>
 
 <body>
 
-  <h1>まねぷよ</h1>
+  <h3>まねぷよ</h3>
 
-  <label>ぷよ譜<input id="puyohu" value="26280"></label>
+  <label>ぷよ譜
+    <select class="select2" id="puyohu">
+      <option value="26280">26280</option>
+      <option value="25741">25741</option>
+    </select>
+  </label>
 
   <button id="btn">ぼたん</button>
 
-  <script src="lib/jquery-3.6.0.min.js"></script>
+  <script src="lib/jquery.min.js"></script>
+  <script src="lib/select2.min.js"></script>
   <script src="popup.js"></script>
 </body>
 

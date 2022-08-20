@@ -1,5 +1,9 @@
 'use strict';
 
+$(document).ready(function() {
+  $('.select2').select2();
+});
+
 document.getElementById('btn').addEventListener('click', async () => {
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   chrome.scripting.executeScript({
@@ -19,7 +23,7 @@ function onRun() {
   var padB = 1;
   var padStart = 9;
   var padSelect = 8;
-  let i = 0;
+  let puyofuNo = 0;
   function update() {
     buttonsOld = new Set(Array.from(buttonsNew));
     buttonsNew.clear();
@@ -41,20 +45,20 @@ function onRun() {
       document.getElementById('turn_right_button').click();
     } else if (!buttonsOld.has(padUp) && buttonsNew.has(padUp)) {
       document.getElementById('toko_back_button').click();
-      if (i > 0) {
+      if (puyofuNo > 0) {
         iframe.contentWindow.document
           .getElementById('puyo_history_back_button')
           .click();
       }
-      i = Math.max(i - 1, 0);
+      puyofuNo = Math.max(puyofuNo - 1, 0);
     } else if (!buttonsOld.has(padDown) && buttonsNew.has(padDown)) {
       document.getElementById('move_down_button').click();
-      if (i > 0) {
+      if (puyofuNo > 0) {
         iframe.contentWindow.document
           .getElementById('puyo_history_forward_button')
           .click();
       }
-      i++;
+      puyofuNo++;
     } else if (!buttonsOld.has(padSelect) && buttonsNew.has(padSelect)) {
       document.getElementById('retry_button').click();
     } else if (!buttonsOld.has(padStart) && buttonsNew.has(padStart)) {

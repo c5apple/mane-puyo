@@ -1,17 +1,21 @@
 {
   "name": "mane-puyo",
   "scripts": {
-    "build": "rm -rf dist && npm run html && npm run css && npm run js && npm run img && npm run json",
+    "build": "rm -rf dist && npm run html && npm run css && npm run js && npm run img && npm run json && npm run jquery && npm run select2",
     "html": "cpx src/*.html dist",
     "css": "node-sass src -o dist --output-style compressed",
     "js": "terser src/popup.js --compress --mangle --ascii_only true --output dist/popup.js",
+    "jquery": "cpx ./node_modules/jquery/dist/jquery.min.js dist/lib",
+    "select2": "cpx ./node_modules/select2/dist/js/select2.min.js dist/lib && cpx ./node_modules/select2/dist/css/select2.min.css dist/lib",
     "img": "cpx src/*.png dist",
     "json": "cpx src/*.json dist"
   },
   "devDependencies": {
     "cpx": "^1.5.0",
+    "jquery": "^3.6.0",
     "milligram": "^1.4.1",
     "node-sass": "^7.0.1",
+    "select2": "^4.1.0-rc.0",
     "terser": "^5.14.2"
   }
 }
