@@ -46,7 +46,7 @@ function onRun() {
           .getElementById('puyo_history_back_button')
           .click();
       }
-      i--;
+      i = Math.max(i - 1, 0);
     } else if (!buttonsOld.has(padDown) && buttonsNew.has(padDown)) {
       document.getElementById('move_down_button').click();
       if (i > 0) {
