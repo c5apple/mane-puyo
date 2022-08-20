@@ -10,8 +10,9 @@
     "activeTab",
     "scripting"
   ],
-  "background": {
-    "service_worker": "puyo.js"
-  },
-  "action": {}
+  "action": {
+    "default_title": "まねぷよ",
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  }
 }
