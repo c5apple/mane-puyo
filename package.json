@@ -1,17 +1,17 @@
 {
   "name": "mane-puyo",
   "scripts": {
-    "start": "npm run html -- -w & npm run css -- -w & npm run js -- -w",
-    "build": "rm -rf dist && npm run html && npm run css && npm run js && npm run json",
+    "build": "rm -rf dist && npm run html && npm run css && npm run js && npm run img && npm run json",
     "html": "cpx src/*.html dist",
-    "css": "node-sass src -o docs --output-style compressed",
-    "js": "babel src -d dist --compact=true --presets=env --no-comments",
+    "css": "node-sass src -o dist --output-style compressed",
+    "js": "terser src/popup.js --compress --mangle --ascii_only true --output dist/popup.js",
+    "img": "cpx src/*.png dist",
     "json": "cpx src/*.json dist"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "cpx": "^1.5.0",
-    "node-sass": "^7.0.1"
+    "milligram": "^1.4.1",
+    "node-sass": "^7.0.1",
+    "terser": "^5.14.2"
   }
 }
