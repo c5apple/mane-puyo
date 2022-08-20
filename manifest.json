@@ -1,0 +1,17 @@
+{
+  "name": "まねぷよ",
+  "description": "",
+  "version": "1.0",
+  "manifest_version": 3,
+  "host_permissions": [
+    "http://www.puyop.com/"
+  ],
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "puyo.js"
+  },
+  "action": {}
+}
