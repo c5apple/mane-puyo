@@ -1,18 +1,52 @@
 'use strict';
 
-$(document).ready(function() {
-  $('.select2').select2();
+let iframe;
+
+$(document).ready(function () {
+  $('.select2')
+    .select2({
+      data: [
+        {
+          id: 26280,
+          text: 'マッキーvsぴぽにあ 第1戦',
+          manepuyo:
+            'http://www.puyop.com/s/_3uh83scm2I2AaM4cnk38iMi8jCfgfwis2Icuka4MdyoMdqekaInI2MeSfwoMeKascqoQfIdQcAku3i48jm4a3GnC4a3ShGmmim4a2Geamqh0i0'
+        },
+        {
+          id: 25741,
+          text: 'マッキーvsぴぽにあ 第2戦',
+          manepuyo:
+            'http://www.puyop.com/s/_ni4c8woq8Ego5ckk1a9Q0u6Gf83wiungnuoG6c1KjQ3Q0M6MgEjAiwnogk9qnEnwoE088q8si050'
+        }
+      ],
+      templateResult: function (item) {
+        const value = $(item.element).val();
+        return $(`<span>${item.text}&nbsp;<small>(${value})</small></span>`);
+      }
+    })
+    .on('select2:select', function (e) {
+      console.log(e.params.data);
+      chrome.storage.local.set({
+        puyofu: e.params.data.id,
+        manepuyo: e.params.data.url
+      });
+    });
+  executeScript(init);
 });
 
-document.getElementById('btn').addEventListener('click', async () => {
+document.getElementById('btn').addEventListener('click', () => {
+  executeScript(show);
+});
+
+const executeScript = async (func) => {
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
-    function: onRun
+    function: func
   });
-});
+};
 
-function onRun() {
+const init = () => {
   var buttonsOld = new Set();
   var buttonsNew = new Set();
   var padLeft = 14;
@@ -24,6 +58,18 @@ function onRun() {
   var padStart = 9;
   var padSelect = 8;
   let puyofuNo = 0;
+
+  iframe = document.createElement('iframe');
+  iframe.id = 'hoge';
+  iframe.scrolling = 'no';
+  iframe.style.cssText =
+    'position: fixed;' +
+    'z-index: 1;' +
+    'width: 290px;' +
+    'height: 490px;' +
+    'right: 0;' +
+    'bottom: 0;';
+
   function update() {
     buttonsOld = new Set(Array.from(buttonsNew));
     buttonsNew.clear();
@@ -71,22 +117,17 @@ function onRun() {
     }
   }
   setInterval(update, 16.6);
+};
 
-  const iframe = document.createElement('iframe');
-  iframe.id = 'hoge';
-  iframe.src =
-    'http://www.puyop.com/s/_ni4c8woq8Ego5ckk1a9Q0u6Gf83wiungnuoG6c1KjQ3Q0M6MgEjAiwnogk9qnEnwoE088q8si050';
-  iframe.scrolling = 'no';
-  iframe.style.cssText =
-    'position: fixed;' +
-    'z-index: 1;' +
-    'width: 290px;' +
-    'height: 490px;' +
-    'right: 0;' +
-    'bottom: 0;';
-
-  document.body.appendChild(iframe);
-  iframe.onload = function () {
-    iframe.contentWindow.scrollTo(0, 65);
-  };
-}
+const show = () => {
+  chrome.storage.local.get(['puyofu', 'manepuyo'], (result) => {
+    iframe.src = result.manepuyo;
+    document.body.appendChild(iframe);
+    iframe.onload = function () {
+      iframe.contentWindow.scrollTo(0, 65);
+    };
+    document.getElementById('tokopuyo_button').click();
+    document.getElementById('haipuyo_pattern').value = result.puyofu;
+    document.getElementById('start_button').click();
+  });
+};
