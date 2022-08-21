@@ -1,37 +1,61 @@
 'use strict';
 
 let iframe;
+let data;
 
 $(document).ready(function () {
-  $('.select2')
-    .select2({
-      data: [
-        {
-          id: 26280,
-          text: 'マッキーvsぴぽにあ 第1戦',
-          manepuyo:
-            'http://www.puyop.com/s/_3uh83scm2I2AaM4cnk38iMi8jCfgfwis2Icuka4MdyoMdqekaInI2MeSfwoMeKascqoQfIdQcAku3i48jm4a3GnC4a3ShGmmim4a2Geamqh0i0'
-        },
-        {
-          id: 25741,
-          text: 'マッキーvsぴぽにあ 第2戦',
-          manepuyo:
-            'http://www.puyop.com/s/_ni4c8woq8Ego5ckk1a9Q0u6Gf83wiungnuoG6c1KjQ3Q0M6MgEjAiwnogk9qnEnwoE088q8si050'
-        }
-      ],
-      templateResult: function (item) {
-        const value = $(item.element).val();
-        return $(`<span>${item.text}&nbsp;<small>(${value})</small></span>`);
+  chrome.storage.local.get('data', (result) => {
+    data = result.data || [
+      {
+        id: 26280,
+        text: 'マッキーvsぴぽにあ 第1戦',
+        manepuyo:
+          'http://www.puyop.com/s/_3uh83scm2I2AaM4cnk38iMi8jCfgfwis2Icuka4MdyoMdqekaInI2MeSfwoMeKascqoQfIdQcAku3i48jm4a3GnC4a3ShGmmim4a2Geamqh0i0',
+        tag: ['マッキー', 'GTR', '先折', 'ABACAB']
+      },
+      {
+        id: 25741,
+        text: 'マッキーvsぴぽにあ 第2戦',
+        manepuyo:
+          'http://www.puyop.com/s/_ni4c8woq8Ego5ckk1a9Q0u6Gf83wiungnuoG6c1KjQ3Q0M6MgEjAiwnogk9qnEnwoE088q8si050',
+        tag: ['マッキー', 'GTR', '先折', 'ABACBD']
+      },
+      {
+        id: 9690,
+        text: 'マッキーvsmomoken 第18戦',
+        manepuyo:
+          'http://www.puyop.com/s/_6aeS4qeQ4EaA1s6Q9k2semcS4m6clmkm1ae81qcAlIaE6A1KaM5you7glKkIoM4SaQ7qow5q1K40k0',
+        tag: ['マッキー', 'GTR', '先折', 'AABCBD']
       }
-    })
-    .on('select2:select', function (e) {
-      console.log(e.params.data);
-      chrome.storage.local.set({
-        puyofu: e.params.data.id,
-        manepuyo: e.params.data.url
+    ];
+
+    $('.select2')
+      .select2({
+        data: data,
+        templateResult: function (item) {
+          const value = $(item.element).val();
+          return $(`<span>${item.text}&nbsp;<small>(${value})</small></span>`);
+        }
+      })
+      .on('select2:select', function (e) {
+        console.log(e.params.data);
+        chrome.storage.local.set({
+          puyofu: e.params.data.id,
+          manepuyo: e.params.data.manepuyo
+        });
       });
-    });
-  executeScript(init);
+
+    $('#data')
+      .find('tbody')
+      .append(
+        data.map((d) => {
+          const tag = d.tag.map((t) => `<span class="tag">${t}</span>`);
+          return `<tr><td><a href="${d.manepuyo}" target="_blank">${d.id}</td><td>${tag}</td></tr>`;
+        })
+      );
+
+    executeScript(init);
+  });
 });
 
 document.getElementById('btn').addEventListener('click', () => {
